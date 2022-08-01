@@ -10,7 +10,7 @@
     <!--</parent>-->
 
     <groupId>com.turing.universe</groupId>
-    <artifactId>universe-book-api-private</artifactId>
+    <artifactId>mybatis-plus-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>universe-book-api-private</name>
     <description>绘本私有化数据管理接口</description>
