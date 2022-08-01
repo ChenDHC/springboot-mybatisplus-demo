@@ -59,8 +59,8 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String start = "2022-07-04 00:00:00";
-        String end = "2022-07-95 00:00:00";
+        String start = "2022-07-01";
+        String end = "2022-07-02";
         List<Log> logs = logMapper.getLogsByDate(start, end);
         System.out.println(logs.size());
     }

@@ -10,7 +10,7 @@ import lombok.Data;
  * @since
  */
 @Data
-@TableName("platform_cloud_log_202208")
+@TableName("platform_cloud_log_202207")
 public class Log {
     private Long id;
     private String question;
