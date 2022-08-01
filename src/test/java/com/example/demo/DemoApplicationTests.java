@@ -59,9 +59,21 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String start = "2022-07-01";
-        String end = "2022-07-02";
+        String start = "2022-07-04";
+        String end = "2022-07-11";
         List<Log> logs = logMapper.getLogsByDate(start, end);
+        for (Log log : logs) {
+            System.out.println(log);
+            if (log == null) continue;
+            String q = log.getQuestion();
+            if (StringUtils.isBlank(q)) continue;
+            Integer parseType = log.getParsetype();
+            if (parseType == 110) {
+                FileUtils.writeToTxt("E:\\1zhou_wiki.txt", q);
+            } else {
+                FileUtils.writeToTxt("E:\\1zhou_ask.txt", q);
+            }
+        }
         System.out.println(logs.size());
     }
 
