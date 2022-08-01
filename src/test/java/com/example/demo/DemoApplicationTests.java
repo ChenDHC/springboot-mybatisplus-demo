@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,29 +28,41 @@ public class DemoApplicationTests {
     private LogService logService;
     @Autowired
     private LogMapper logMapper;
+    private static final Set<String> APP_KEYS = new HashSet<>(Arrays.asList("platform.chat", "os.sys.chat"));
+    private static final List<Integer> ASK_PARSETYPE = Arrays.asList(37, 38, 106);
+    private static final List<Integer> WIKI_PARSETYPE = Arrays.asList(110);
+    private static final String ASK_CHAT_URL = "http://47.94.53.111/ask_chat?message=%s";
 
     @Test
     public void contextLoads() {
-        System.out.println(logService.getById(1));
-        Set<String> logs = new HashSet<String>();
-        int count = 18000;
-        for (int i = 1; i < count; i++) {
-            System.out.println(i);
-            Log log = logService.getById(i);
-            if (null == log) {
-                continue;
-            }
-            String q = log.getAppkey();
-            if (StringUtils.isEmpty(q)) {
-                continue;
-            }
-            logs.add(q);
+        exportLogByDate();
+//        System.out.println(logService.getById(1));
+//        Set<String> logs = new HashSet<String>();
+//        int count = 18000;
+//        for (int i = 1; i < count; i++) {
+//            System.out.println(i);
+//            Log log = logService.getById(i);
+//            if (null == log) {
+//                continue;
+//            }
+//            String q = log.getAppkey();
+//            if (StringUtils.isEmpty(q)) {
+//                continue;
+//            }
+//            logs.add(q);
 //            if (logs.size() == 100000) {
 //                FileUtils.writeToTxt("E:\\log_1.txt", StringUtils.join(logs.toArray(), "\n"));
 //                logs.clear();
 //            }
-        }
-        System.out.println(logs);
+//        }
+//        System.out.println(logs);
+    }
+
+    private void exportLogByDate() {
+        String start = "2022-07-04 00:00:00";
+        String end = "2022-07-95 00:00:00";
+        List<Log> logs = logMapper.getLogsByDate(start, end);
+        System.out.println(logs.size());
     }
 
     private void exportLog() {

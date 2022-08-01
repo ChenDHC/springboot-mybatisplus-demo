@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +18,9 @@ import java.util.List;
  */
 @Mapper
 public interface LogMapper extends BaseMapper<Log> {
-    @Select("select question from platform_cloud_log_202207 where id>=${idStart} and id< ${idEnd}")
-    List<Log> getLogs(@Param("idStart") Long idStart, @Param("idEnd") Long idEnd);
+    @Select("select question,parsetype from platform_cloud_log_202208 where id>=${idStart} and id< ${idEnd}")
+    List<Log> getLogsById(@Param("idStart") Long idStart, @Param("idEnd") Long idEnd);
+
+    @Select("select question,parsetype from platform_cloud_log_202208 where create_date>${start} and create_date < ${end}")
+    List<Log> getLogsByDate(@Param("start") String start, @Param("end") String end);
 }
