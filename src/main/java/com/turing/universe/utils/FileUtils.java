@@ -87,4 +87,10 @@ public class FileUtils {
             }
         }
     }
+
+    public static String replaceStartEndBiaodian(String content) {
+        content = content.replaceAll("[\\pP\\p{Punct}]+$", "");
+        content = content.replaceAll("^[\\pP\\p{Punct}]+", "");
+        return content;
+    }
 }

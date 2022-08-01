@@ -67,13 +67,15 @@ public class DemoApplicationTests {
             if (log == null) continue;
             String q = log.getQuestion();
             if (StringUtils.isBlank(q)) continue;
+            q = FileUtils.replaceStartEndBiaodian(q);
+            if (StringUtils.isBlank(q)) continue;
             // 判断是否疑问句
             if (!FileUtils.isAsk(q)) continue;
             Integer parseType = log.getParsetype();
             if (parseType == 110) {
-                FileUtils.writeToTxt("E:\\1zhou_wiki.txt", q);
+                FileUtils.writeToTxt("E:\\wiki.txt", q);
             } else {
-                FileUtils.writeToTxt("E:\\1zhou_ask.txt", q);
+                FileUtils.writeToTxt("E:\\ask.txt", q);
             }
         }
     }
