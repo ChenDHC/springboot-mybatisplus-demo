@@ -1,4 +1,4 @@
-package com.turing.universe;
+package com.turing.universe.config;
 
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;

@@ -13,9 +13,12 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     # 使用druid连接池
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://new2.mysql.tuling.com:3306/turing_universe_book?characterEncoding=utf-8&autoReconnect=true
-    username: appuser
-    password: appuser123
+#    url: jdbc:mysql://new2.mysql.tuling.com:3306/turing_universe_book?characterEncoding=utf-8&autoReconnect=true
+#    username: appuser
+#    password: appuser123
+    url: jdbc:mysql://101.201.73.129:3318/turing_platform_log?characterEncoding=utf-8&autoReconnect=true
+    username: nlp_turing_log
+    password: u3n2ffJcUHaKHuEK
     druid:
           # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
           connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
