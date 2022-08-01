@@ -31,7 +31,7 @@ public class DemoApplicationTests {
     private static final Set<String> APP_KEYS = new HashSet<>(Arrays.asList("platform.chat", "os.sys.chat"));
     private static final List<Integer> ASK_PARSETYPE = Arrays.asList(37, 38, 106);
     private static final List<Integer> WIKI_PARSETYPE = Arrays.asList(110);
-    private static final String ASK_CHAT_URL = "http://47.94.53.111/ask_chat?message=%s";
+
 
     @Test
     public void contextLoads() {
@@ -59,14 +59,16 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String start = "2022-07-04";
-        String end = "2022-07-11";
+        String start = "2022-08-01";
+        String end = "2022-08-01 07";
         List<Log> logs = logMapper.getLogsByDate(start, end);
+        System.out.println(logs.size());
         for (Log log : logs) {
-            System.out.println(log);
             if (log == null) continue;
             String q = log.getQuestion();
             if (StringUtils.isBlank(q)) continue;
+            // 判断是否疑问句
+            if (!FileUtils.isAsk(q)) continue;
             Integer parseType = log.getParsetype();
             if (parseType == 110) {
                 FileUtils.writeToTxt("E:\\1zhou_wiki.txt", q);
@@ -74,7 +76,6 @@ public class DemoApplicationTests {
                 FileUtils.writeToTxt("E:\\1zhou_ask.txt", q);
             }
         }
-        System.out.println(logs.size());
     }
 
     private void exportLog() {

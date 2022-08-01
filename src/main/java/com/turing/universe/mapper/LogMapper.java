@@ -21,6 +21,6 @@ public interface LogMapper extends BaseMapper<Log> {
     @Select("select question,parsetype from platform_cloud_log_202207 where id>=${idStart} and id< ${idEnd}")
     List<Log> getLogsById(@Param("idStart") Long idStart, @Param("idEnd") Long idEnd);
 
-    @Select("select question,parsetype from platform_cloud_log_202207 where create_date>'${start}' and create_date < '${end}' and appkey in('os.sys.chat','platform.chat') and parsetype in (37,38,106,110)")
+    @Select("select question,parsetype from platform_cloud_log_202208 where create_date>'${start}' and create_date < '${end}' and appkey in('os.sys.chat','platform.chat') and parsetype in (37,38,106,110)")
     List<Log> getLogsByDate(@Param("start") String start, @Param("end") String end);
 }
