@@ -30,26 +30,30 @@ public class DemoApplicationTests {
 
     @Test
     public void contextLoads() {
-//        System.out.println(logService.getById(1));
-//        Set<String> logs = new HashSet<String>();
-//        int count = 18000000;
-//        for (int i = 1; i < count; i++) {
-//            System.out.println(i);
-//            Log log = logService.getById(i);
-//            if (null == log) {
-//                continue;
-//            }
-//            String q = log.getQuestion();
-//            if (StringUtils.isEmpty(q)) {
-//                continue;
-//            }
-//            logs.add(q);
+        System.out.println(logService.getById(1));
+        Set<String> logs = new HashSet<String>();
+        int count = 18000;
+        for (int i = 1; i < count; i++) {
+            System.out.println(i);
+            Log log = logService.getById(i);
+            if (null == log) {
+                continue;
+            }
+            String q = log.getAppkey();
+            if (StringUtils.isEmpty(q)) {
+                continue;
+            }
+            logs.add(q);
 //            if (logs.size() == 100000) {
 //                FileUtils.writeToTxt("E:\\log_1.txt", StringUtils.join(logs.toArray(), "\n"));
 //                logs.clear();
 //            }
-//        }
-//        for (int i = 0; i < 180; i++) {
+        }
+        System.out.println(logs);
+    }
+
+    private void exportLog() {
+        //        for (int i = 0; i < 180; i++) {
 //            System.out.println(i);
 //            Long start = i * 100000L;
 //            Long end = (i + 1) * 100000L;
@@ -66,9 +70,6 @@ public class DemoApplicationTests {
 //            }
 //            FileUtils.writeToTxt("E:\\log_2.txt", StringUtils.join(qs.toArray(), "\n"));
 //        }
-        List<String> lines = FileUtil.readUtf8Lines("E:\\log_2.txt");
-        Set<String> logs = lines.stream().collect(Collectors.toSet());
-        FileUtils.writeToTxt("E:\\log_3.txt", StringUtils.join(logs.toArray(), "\n"));
     }
 
 }
