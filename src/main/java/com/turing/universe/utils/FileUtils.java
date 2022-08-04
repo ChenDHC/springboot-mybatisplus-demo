@@ -1,5 +1,7 @@
 package com.turing.universe.utils;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -11,6 +13,8 @@ import java.net.URLEncoder;
  */
 public class FileUtils {
     private static final String ASK_CHAT_URL = "http://47.94.53.111/ask_chat?message=%s";
+
+
 
     /**
      * httpget
@@ -66,29 +70,55 @@ public class FileUtils {
      * @param path
      * @param content
      */
-    public static void writeToTxt(String path, String content) {
+//    public static void writeToTxt(String path, String content) {
+//        File file = new File(path);
+//        FileWriter fw = null;
+//        BufferedWriter writer = null;
+//        try {
+//            fw = new FileWriter(file, true);
+//            writer = new BufferedWriter(fw);
+//            writer.write(content);
+//            writer.newLine();
+//            writer.flush();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                writer.close();
+//                fw.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+    /**
+     * 写文件
+     *
+     * @param path
+     * @param contents 多个字段， 以 \t 隔开
+     */
+    public static void writeToTxt(String path, Object... contents) {
+        String content = "";
+        for (Object item : contents) {
+            content = content + item + "\t";
+        }
+        content = StringUtils.strip(content);
+
         File file = new File(path);
-        FileWriter fw = null;
-        BufferedWriter writer = null;
-        try {
-            fw = new FileWriter(file, true);
-            writer = new BufferedWriter(fw);
+        try (
+                FileWriter fw = new FileWriter(file, true);
+                BufferedWriter writer = new BufferedWriter(fw)
+        ) {
             writer.write(content);
             writer.newLine();
             writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                writer.close();
-                fw.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
     public static String replaceStartEndBiaodian(String content) {
+        content = StringUtils.strip(content);
         content = content.replaceAll("[\\pP\\p{Punct}]+$", "");
         content = content.replaceAll("^[\\pP\\p{Punct}]+", "");
         return content;

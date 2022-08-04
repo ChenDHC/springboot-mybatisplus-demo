@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.map.MapUtil;
 import com.turing.universe.DemoApplication;
 import com.turing.universe.entity.Log;
 import com.turing.universe.mapper.LogMapper;
@@ -14,10 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
@@ -56,11 +55,28 @@ public class DemoApplicationTests {
 //            }
 //        }
 //        System.out.println(logs);
+//        List<String> l = new ArrayList<>();
+//
+//        l.add("2");
+//        l.add("2");
+//        l.add("3");
+//        l.add("4");
+//        l.add("4");
+//        l.add("1");
+//        l.add("1");
+//        l.add("1");
+//        l.add("1");
+//        l.add("1");
+//        Map<String, Integer> map = CollectionUtil.countMap(l);
+//        Map<String, Integer> newMap = MapUtil.sortByValue(map, true);
+//        System.out.println(newMap);
     }
 
     private void exportLogByDate() {
-        String start = "2022-08-01";
-        String end = "2022-08-01 07";
+        String start = "2022-08-04";
+        String end = "2022-08-04 07";
+        Map<String, Integer> askMap = new HashMap<>();
+        Map<String, Integer> wikiMap = new HashMap<>();
         List<Log> logs = logMapper.getLogsByDate(start, end);
         System.out.println(logs.size());
         for (Log log : logs) {
@@ -73,11 +89,27 @@ public class DemoApplicationTests {
             if (!FileUtils.isAsk(q)) continue;
             Integer parseType = log.getParsetype();
             if (parseType == 110) {
-                FileUtils.writeToTxt("E:\\wiki.txt", q);
+                if (q.contains("是谁")) {
+                    q = q.substring(0, q.indexOf("是谁"));
+                }
+                System.out.println(q);
+                Integer count = wikiMap.getOrDefault(q, 0);
+                ++count;
+                wikiMap.put(q, count);
             } else {
-                FileUtils.writeToTxt("E:\\ask.txt", q);
+                Integer count = askMap.getOrDefault(q, 0);
+                ++count;
+                askMap.put(q, count);
             }
         }
+        Map<String, Integer> newWikiMap = MapUtil.sortByValue(wikiMap, true);
+        Map<String, Integer> newAskMap = MapUtil.sortByValue(askMap, true);
+        newWikiMap.forEach((k, v) -> {
+            FileUtils.writeToTxt("E:\\wiki_freq.txt", k, v);
+        });
+        newAskMap.forEach((k, v) -> {
+            FileUtils.writeToTxt("E:\\ask_freq.txt", k, v);
+        });
     }
 
     private void exportLog() {
