@@ -73,8 +73,8 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String start = "2022-08-04";
-        String end = "2022-08-04 07";
+        String start = "2022-08-05";
+        String end = "2022-08-05 07";
         Map<String, Integer> askMap = new HashMap<>();
         Map<String, Integer> wikiMap = new HashMap<>();
         List<Log> logs = logMapper.getLogsByDate(start, end);
