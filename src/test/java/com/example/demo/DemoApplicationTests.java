@@ -73,13 +73,18 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String start = "2022-08-05";
-        String end = "2022-08-05 07";
+        String start = "2022-08-07";
+        String end = "2022-08-07 07";
         Map<String, Integer> askMap = new HashMap<>();
         Map<String, Integer> wikiMap = new HashMap<>();
         List<Log> logs = logMapper.getLogsByDate(start, end);
         System.out.println(logs.size());
+        int index = 0;
         for (Log log : logs) {
+            ++index;
+            if (index % 100 == 0) {
+                System.out.println(index);
+            }
             if (log == null) continue;
             String q = log.getQuestion();
             if (StringUtils.isBlank(q)) continue;
@@ -92,7 +97,6 @@ public class DemoApplicationTests {
                 if (q.contains("是谁")) {
                     q = q.substring(0, q.indexOf("是谁"));
                 }
-                System.out.println(q);
                 Integer count = wikiMap.getOrDefault(q, 0);
                 ++count;
                 wikiMap.put(q, count);
