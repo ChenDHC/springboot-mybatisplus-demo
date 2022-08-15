@@ -1,11 +1,11 @@
 package com.example.demo;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import com.turing.universe.DemoApplication;
+import com.turing.universe.entity.Ask;
 import com.turing.universe.entity.Log;
 import com.turing.universe.mapper.LogMapper;
+import com.turing.universe.service.AskService;
 import com.turing.universe.service.LogService;
 import com.turing.universe.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,10 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DemoApplication.class)
@@ -27,6 +25,8 @@ public class DemoApplicationTests {
     private LogService logService;
     @Autowired
     private LogMapper logMapper;
+    @Autowired
+    private AskService askService;
     private static final Set<String> APP_KEYS = new HashSet<>(Arrays.asList("platform.chat", "os.sys.chat"));
     private static final List<Integer> ASK_PARSETYPE = Arrays.asList(37, 38, 106);
     private static final List<Integer> WIKI_PARSETYPE = Arrays.asList(110);
@@ -35,46 +35,12 @@ public class DemoApplicationTests {
     @Test
     public void contextLoads() {
         exportLogByDate();
-//        System.out.println(logService.getById(1));
-//        Set<String> logs = new HashSet<String>();
-//        int count = 18000;
-//        for (int i = 1; i < count; i++) {
-//            System.out.println(i);
-//            Log log = logService.getById(i);
-//            if (null == log) {
-//                continue;
-//            }
-//            String q = log.getAppkey();
-//            if (StringUtils.isEmpty(q)) {
-//                continue;
-//            }
-//            logs.add(q);
-//            if (logs.size() == 100000) {
-//                FileUtils.writeToTxt("E:\\log_1.txt", StringUtils.join(logs.toArray(), "\n"));
-//                logs.clear();
-//            }
-//        }
-//        System.out.println(logs);
-//        List<String> l = new ArrayList<>();
-//
-//        l.add("2");
-//        l.add("2");
-//        l.add("3");
-//        l.add("4");
-//        l.add("4");
-//        l.add("1");
-//        l.add("1");
-//        l.add("1");
-//        l.add("1");
-//        l.add("1");
-//        Map<String, Integer> map = CollectionUtil.countMap(l);
-//        Map<String, Integer> newMap = MapUtil.sortByValue(map, true);
-//        System.out.println(newMap);
     }
 
     private void exportLogByDate() {
-        String start = "2022-08-07";
-        String end = "2022-08-07 07";
+        String date = "2022-08-16";
+        String start = date;
+        String end = date + " 07";
         Map<String, Integer> askMap = new HashMap<>();
         Map<String, Integer> wikiMap = new HashMap<>();
         List<Log> logs = logMapper.getLogsByDate(start, end);
@@ -82,7 +48,7 @@ public class DemoApplicationTests {
         int index = 0;
         for (Log log : logs) {
             ++index;
-            if (index % 100 == 0) {
+            if (index % 1000 == 0) {
                 System.out.println(index);
             }
             if (log == null) continue;
@@ -108,13 +74,43 @@ public class DemoApplicationTests {
         }
         Map<String, Integer> newWikiMap = MapUtil.sortByValue(wikiMap, true);
         Map<String, Integer> newAskMap = MapUtil.sortByValue(askMap, true);
-        newWikiMap.forEach((k, v) -> {
-            FileUtils.writeToTxt("E:\\wiki_freq.txt", k, v);
-        });
-        newAskMap.forEach((k, v) -> {
-            FileUtils.writeToTxt("E:\\ask_freq.txt", k, v);
-        });
+        processWikiAsk(newAskMap, String.format("E:\\问答_%s.txt", date.replace("-", "")));
+        processWikiAsk(newWikiMap, String.format("E:\\百科_%s.txt", date.replace("-", "")));
+//        newWikiMap.forEach((k, v) -> {
+//            FileUtils.writeToTxt("E:\\wiki_freq.txt", k, v);
+//        });
+//        newAskMap.forEach((k, v) -> {
+//            FileUtils.writeToTxt("E:\\ask_freq.txt", k, v);
+//        });
     }
+
+    private void processWikiAsk(Map<String, Integer> map, String filePath) {
+        List<String> contents = new ArrayList<>(200);
+        for (Map.Entry<String, Integer> item : map.entrySet()) {
+            String q = StringUtils.strip(item.getKey());
+            Ask ask = askService.selectOneByContent(q);
+            if (null != ask) {
+                continue;
+            }
+            contents.add(q);
+            if (contents.size() == 200) {
+                break;
+            }
+        }
+        // 入库
+        for (String content : contents) {
+            Ask ask = new Ask();
+            ask.setContent(content);
+            try {
+                askService.save(ask);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 写入文件
+        FileUtils.writeToTxt(filePath, StringUtils.join(contents.toArray(), "\n"));
+    }
+
 
     private void exportLog() {
         //        for (int i = 0; i < 180; i++) {
