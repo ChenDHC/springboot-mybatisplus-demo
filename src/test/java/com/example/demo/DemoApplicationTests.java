@@ -38,7 +38,7 @@ public class DemoApplicationTests {
     }
 
     private void exportLogByDate() {
-        String date = "2022-08-16";
+        String date = "2022-08-22";
         String start = date;
         String end = date + " 07";
         Map<String, Integer> askMap = new HashMap<>();

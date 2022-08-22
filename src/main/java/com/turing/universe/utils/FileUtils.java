@@ -15,7 +15,6 @@ public class FileUtils {
     private static final String ASK_CHAT_URL = "http://47.94.53.111/ask_chat?message=%s";
 
 
-
     /**
      * httpget
      *
@@ -48,7 +47,8 @@ public class FileUtils {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
+            return "";
         }
 
     }
@@ -91,6 +91,7 @@ public class FileUtils {
 //            }
 //        }
 //    }
+
     /**
      * 写文件
      *
