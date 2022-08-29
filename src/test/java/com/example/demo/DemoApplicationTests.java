@@ -39,7 +39,7 @@ public class DemoApplicationTests {
 
     private void exportLogById() {
         String date = "2022-06-%s";
-        for (int i = 1; i < 31; i++) {
+        for (int i = 1; i < 30; i++) {
             String today = "";
             String nextDay = "";
             int next = i + 1;
@@ -69,7 +69,7 @@ public class DemoApplicationTests {
                     continue;
                 }
                 // 写入文件
-                FileUtils.writeToTxt("E:\\log.txt", q);
+                FileUtils.writeToTxt("E:\\log_6.txt", q);
             }
         }
     }
