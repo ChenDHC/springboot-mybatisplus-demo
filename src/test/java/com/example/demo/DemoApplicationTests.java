@@ -34,13 +34,50 @@ public class DemoApplicationTests {
 
     @Test
     public void contextLoads() {
-        exportLogByDate();
+        exportLogById();
+    }
+
+    private void exportLogById() {
+        String date = "2022-05-%s";
+        for (int i = 1; i < 31; i++) {
+            String today = "";
+            String nextDay = "";
+            int next = i + 1;
+            if (i < 10) {
+                today = "0" + i;
+            } else {
+                today = "" + i;
+            }
+            if (next < 10) {
+                nextDay = "0" + next;
+            } else {
+                nextDay = "" + next;
+            }
+            String start = String.format(date, today);
+            String end = String.format(date, nextDay);
+            System.out.println(start + "\t" + end);
+            List<Log> logs = logMapper.getLogsByDate(start, end);
+            for (Log log : logs) {
+                String q = log.getQuestion();
+                if (StringUtils.isBlank(q)) {
+                    continue;
+                }
+                q = StringUtils.strip(q);
+                q = FileUtils.replaceStartEndBiaodian(q);
+                q = StringUtils.strip(q);
+                if (StringUtils.isBlank(q)) {
+                    continue;
+                }
+                // 写入文件
+                FileUtils.writeToTxt("E:\\log.txt", q);
+            }
+        }
     }
 
     private void exportLogByDate() {
-        String date = "2022-08-22";
+        String date = "2022-08-27";
         String start = date;
-        String end = date + " 07";
+        String end = date + " 08";
         Map<String, Integer> askMap = new HashMap<>();
         Map<String, Integer> wikiMap = new HashMap<>();
         List<Log> logs = logMapper.getLogsByDate(start, end);
@@ -76,12 +113,6 @@ public class DemoApplicationTests {
         Map<String, Integer> newAskMap = MapUtil.sortByValue(askMap, true);
         processWikiAsk(newAskMap, String.format("E:\\问答_%s.txt", date.replace("-", "")));
         processWikiAsk(newWikiMap, String.format("E:\\百科_%s.txt", date.replace("-", "")));
-//        newWikiMap.forEach((k, v) -> {
-//            FileUtils.writeToTxt("E:\\wiki_freq.txt", k, v);
-//        });
-//        newAskMap.forEach((k, v) -> {
-//            FileUtils.writeToTxt("E:\\ask_freq.txt", k, v);
-//        });
     }
 
     private void processWikiAsk(Map<String, Integer> map, String filePath) {
