@@ -69,7 +69,7 @@ public class DemoApplicationTests {
                     continue;
                 }
                 // 写入文件
-                FileUtils.writeToTxt("E:\\log.txt", q);
+                FileUtils.writeToTxt("E:\\log_7.txt", q);
             }
         }
     }
