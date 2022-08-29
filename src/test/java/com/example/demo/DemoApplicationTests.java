@@ -38,7 +38,7 @@ public class DemoApplicationTests {
     }
 
     private void exportLogById() {
-        String date = "2022-05-%s";
+        String date = "2022-06-%s";
         for (int i = 1; i < 31; i++) {
             String today = "";
             String nextDay = "";
